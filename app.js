@@ -37,21 +37,19 @@ const oilPrices = {
   ],
 };
 
-// IP filtering - localhost only
-app.use((req, res, next) => {
-  let ip = req.ip || req.connection.remoteAddress;
+// IP filtering
+const { IpFilter, IpDeniedError } = require("express-ipfilter");
 
-  if (ip === "::ffff:127.0.0.1") {
-    ip = "127.0.0.1";
-  }
+const ips = ["127.0.0.1", "::1"];
 
-  const allowedIps = ["127.0.0.1", "::1"];
+const ipFilterMiddleware = IpFilter(ips, { mode: "allow" });
+app.use(ipFilterMiddleware);
 
-  if (!allowedIps.includes(ip)) {
+app.use((err, req, res, next) => {
+  if (err instanceof IpDeniedError) {
     return res.status(403).send("403 Forbidden: IP not allowed");
   }
-
-  next();
+  next(err);
 });
 
 // CORS configuration
