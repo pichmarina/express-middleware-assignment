@@ -1,53 +1,90 @@
 # Express Middleware Assignment
 
-This project secures an Energy API using Express.js middleware.
+This project demonstrates how to secure an Energy API using Express.js middleware, including IP filtering, CORS, rate limiting, and authentication mechanisms.
+
+---
+
+## Features
+
+- IP Filtering (only allows localhost)
+- CORS restriction (local development origin only)
+- Rate Limiting (10 requests per minute)
+- JWT Bearer Token Authentication (`/api/oil-prices`)
+- Basic Authentication (`/dashboard`)
+- Logout functionality (`/logout`)
+
+---
 
 ## Installation
 
-Install the required packages:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Start the server:
+Run the Server
 
 ```bash
 npm start
 ```
 
-The server runs on `http://localhost:3000`
+Server runs at:
 
-
-## Authentication
-
-### Bearer Token for Testing
-
-To access the protected API route `/api/oil-prices`, use the following header:
-
-```
-Authorization: Bearer energy_secret_2026
-```
-
-### Basic Auth for /dashboard
-
-To access the protected dashboard route `/dashboard`, use these credentials:
-
-- **Username:** `admin`
-- **Password:** `123456`
+`http://localhost:3000`
 
 ---
 
-## Endpoints
+## Bearer Token (JWT) for Testing
 
-### `GET /api/oil-prices`
+This project uses JWT for authentication.
 
-Protected with Bearer Token authentication. Returns the static oil price JSON object.
+### Step 1: Generate Token
 
-### `GET /dashboard`
+Send a POST request to:
 
-Protected with Basic Auth. Serves a simple HTML dashboard showing the oil prices.
+`http://localhost:3000/login`
 
-### `GET /logout`
+With this JSON body:
 
-Logs the user out by forcing re-authentication and displays a logged out message.
+```json
+{
+  "username": "marina",
+  "password": "123456"
+}
+```
+
+### Step 2: Use the Token
+
+The server will return a JWT token. Use it like this:
+
+```
+Authorization: Bearer <your_generated_token>
+```
+
+### Example Protected Endpoint
+
+`GET /api/oil-prices`
+
+---
+
+## Basic Auth for Dashboard
+
+Access the dashboard:
+
+`http://localhost:3000/dashboard`
+
+Credentials:
+
+- Username: `admin`
+- Password: `123456`
+
+---
+
+## Logout
+
+Visit:
+
+`http://localhost:3000/logout`
+
+This clears access and shows a logged-out page.
